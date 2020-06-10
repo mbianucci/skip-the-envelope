@@ -1,6 +1,6 @@
 {
   "name": "Skip the Envelope",
-  "version": "1.0",
+  "version": "1.1",
   "content_scripts": [
     {
       "matches": ["*://delivery.cardago.com/*"],
@@ -11,6 +11,7 @@
     "16": "images/skip_envelope16.png",
     "32": "images/skip_envelope32.png",
     "48": "images/skip_envelope48.png",
+    "96": "images/skip_envelope96.png",
     "128": "images/skip_envelope128.png"
   },
   "manifest_version": 2
