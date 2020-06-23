@@ -7,11 +7,11 @@ function skip(button, inner_text) {
     // Confirm we aren't about to click on something we don't intend to.
     for(let i = 0;i < buttons.length; ++i) {
         if(buttons[i].innerText === inner_text)
-            buttons[i].click();
             if (observer != null) {
                 observer.disconnect(); // with mission accomplished, deactivate observer
                 observer = null;
             }
+            buttons[i].click();
     }
 }
 
