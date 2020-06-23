@@ -19,7 +19,7 @@ function MutationCallback(mutation, observer) {
 
 function main() {
   if(!skip(AnimationSkipper.button, AnimationSkipper.inner_text)) {
-    console.assert(AnimationSkipper.mutating_class == null,
+    console.assert(AnimationSkipper.mutating_class != null,
       'Button didn\'t exist when it was expected, please let someone know ' +
       'what page this occured on.');
     const target = document.getElementsByClassName(
