@@ -1,3 +1,4 @@
+
 function skip(button, inner_text, observer) {
   let buttons = document.querySelectorAll(button);
 
