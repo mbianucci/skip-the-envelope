@@ -1,9 +1,8 @@
 {
   "name": "Skip the Envelope",
-  "version": "1.31",
+  "version": "2.0",
   "manifest_version": 2,
   "permissions": [
-    "declarativeContent",
     "tabs"
   ],
   "background": {
@@ -19,8 +18,16 @@
   ],
   "page_action": {
     "default_title": "Click to extract GC info.",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/skip_envelope16.png",
+      "32": "images/skip_envelope32.png",
+      "48": "images/skip_envelope48.png",
+      "96": "images/skip_envelope96.png",
+      "128": "images/skip_envelope128.png"
+    }
   },
+  // Include icons here too so that extension management pages show the icon.
   "icons": {
     "16": "images/skip_envelope16.png",
     "32": "images/skip_envelope32.png",
