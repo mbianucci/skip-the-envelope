@@ -61,37 +61,41 @@ function init() {
   go();
 }
 
-// If for some reason there are two divs that match the pattern we expect for
-// this specific info (whether number/pin/val), then just mark the info as
-// unsure so that the user can be informed and can confirm if the numbers that
-// we display match the information they see.
-function assign_gc_info(info, extracted, to_change) {
+// If an index isn't provided, then assume that the extracted var should either
+// be added to the last GC stored if it doesn't already contain information for
+// that var. If it does, then add a new one. If the index is provided, then
+// assign the extracted value to that GC without regard for if something was
+// already there. TODO: Should we care if something was already there?
+function assign_gc_info(info, extracted, to_change, index = -1) {
+  if(index === -1) {
+    if (info.length == 0 ||
+        (to_change == 'pin' && info[info.length-1].pin !== "") ||
+        (to_change == 'num' && info[info.length-1].number !== "") ||
+        (to_change == 'val' && info[info.length-1].value !== "")) {
+      info.push({number: "",
+        pin: "",
+        value: "",
+        valid: true});
+    }
+    index = info.length-1;
+  }
+  console.log(to_change + " index = " + index);
+
   switch (to_change) {
     case 'pin':
-      if(info.pin !== "")
-        info.unsure = true;
-      info.pin = extracted;
+      info[index].pin = extracted;
       break;
     case 'num':
-      if(info.number !== "")
-        info.unsure = true;
-      info.number = extracted;
+      info[index].number = extracted;
       break;
     case 'val':
-      if(info.value !== "")
-        info.unsure = true;
-      info.value = extracted;
+      info[index].value = extracted;
   }
 }
 
 function add_extraction_listener() {
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    let gc_info = {
-      number: "",
-      pin: "",
-      value: "",
-      unsure: false
-    }
+    let gc_info = [];
 
     switch (window.location.hostname) {
       case 'www.paypal.com':
@@ -106,10 +110,27 @@ function add_extraction_listener() {
             assign_gc_info(gc_info, num_or_pin.innerText.slice(4), 'pin');
         }
 
+        // Values should always be in the same order as the numbers and pins.
         let value = document.querySelectorAll('.e1qejv263');
+        let val_index = 0;
         for(let val of value) {
-          if(val.innerText.includes('$'))
-            assign_gc_info(gc_info, val.innerText.slice(1), 'val');
+          if(val.innerText.includes('$')) {
+            assign_gc_info(gc_info, val.innerText.slice(1), 'val', val_index);
+            val_index++;
+          }
+        }
+
+        console.log("count = " + gc_info.length);
+
+        // Every GC must have a number and a value - PIN isn't required in cases
+        // like iTunes. Confirm that everyone has both of those, and if it
+        // doesn't mark it invalid so we let the user know it may be incorrect.
+        let valid = true;
+        for(let i = 0;i< gc_info.length;i++) {
+          if(gc_info[i].number === "" || gc_info[i].value === "" || !valid) {
+            valid = false;
+            gc_info[i].valid = false;
+          }
         }
         break;
 
@@ -164,6 +185,11 @@ function add_extraction_listener() {
             if(formatted_line.length >= 8)
               assign_gc_info(gc_info, formatted_line, 'num');
           }
+        }
+
+        if(gc_info.length > 1) {
+          console.log("Found more than one potential GC");
+          gc_info[0].valid = false;
         }
         break;
     }
