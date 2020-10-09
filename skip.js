@@ -61,13 +61,13 @@ function init() {
   go();
 }
 
-// If an index isn't provided, then assume that the extracted var should either
-// be added to the last GC stored if it doesn't already contain information for
-// that var. If it does, then add a new one. If the index is provided, then
-// assign the extracted value to that GC without regard for if something was
-// already there. TODO: Should we care if something was already there?
+// If an index isn't provided, then assume that extracted should be added to
+// the last GC stored if it doesn't already contain information for that var.
+// If it does, then add a new GC to the array. If the index is provided, then
+// assign extracted to that GC regardless of pre-existing information there.
+// TODO: Should we care if something was already there?
 function assign_gc_info(info, extracted, to_change, index = -1) {
-  if(index === -1) {
+  if(index == -1) {
     if (info.length == 0 ||
         (to_change == 'pin' && info[info.length-1].pin !== "") ||
         (to_change == 'num' && info[info.length-1].number !== "") ||
@@ -79,7 +79,6 @@ function assign_gc_info(info, extracted, to_change, index = -1) {
     }
     index = info.length-1;
   }
-  console.log(to_change + " index = " + index);
 
   switch (to_change) {
     case 'pin':
@@ -110,7 +109,7 @@ function add_extraction_listener() {
             assign_gc_info(gc_info, num_or_pin.innerText.slice(4), 'pin');
         }
 
-        // Values should always be in the same order as the numbers and pins.
+        // Values should always be in the same order as the numbers and PINs.
         let value = document.querySelectorAll('.e1qejv263');
         let val_index = 0;
         for(let val of value) {
@@ -120,11 +119,9 @@ function add_extraction_listener() {
           }
         }
 
-        console.log("count = " + gc_info.length);
-
         // Every GC must have a number and a value - PIN isn't required in cases
         // like iTunes. Confirm that everyone has both of those, and if it
-        // doesn't mark it invalid so we let the user know it may be incorrect.
+        // doesn't, mark it invalid so we let the user know it may be incorrect.
         let valid = true;
         for(let i = 0;i< gc_info.length;i++) {
           if(gc_info[i].number === "" || gc_info[i].value === "" || !valid) {

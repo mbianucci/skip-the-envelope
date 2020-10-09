@@ -5,7 +5,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     if(response && response.length >= 1) {
       // Format all of the cards' info nicely. Keep track of validity separately
       // so that if any of the GCs are marked invalid then the text is not
-      // automatically put on the users's clipboard and the warning is displayed.
+      // automatically put on the user's clipboard and a warning is displayed.
       let info = "";
       let valid = true;
       for(let r of response) {
