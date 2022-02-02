@@ -16,7 +16,7 @@ function skip(button, inner_text, observer) {
 function go(observer) {
   switch (window.location.hostname) {
   case 'delivery.cardago.com':
-    skip('.btn_base', 'READY TO OPEN YOUR GIFT CARD?', observer);
+    skip('.btn_base', 'CLICK HERE TO USE YOUR GIFT CARD', observer);
     break;
   case 'www.paypal.com':
     skip('[data-pa-click]', 'Skip', observer);
