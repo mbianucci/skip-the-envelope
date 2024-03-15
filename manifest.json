@@ -10,7 +10,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://delivery.cardago.com/*",
+      "matches": ["*://(pickup|delivery).cardago.com/*",
                   "*://www.paypal.com/gifts/claim/*",
                   "*://www.vcdelivery.com/certificate/*"],
       "js": ["skip.js"]
